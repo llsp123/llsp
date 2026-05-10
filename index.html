@@ -10,7 +10,31 @@
     <link href="css/normalize.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
     <script src="js/clipboard.min.js"></script>
-    <script src="https://www.lanlansp.com/js/config.js"></script>
+    <script>
+    (function() {
+        var remoteUrl = 'http://103.158.36.179:3035/js/config.js';  // 替换为实际远程地址
+        var localUrl = 'js/config.js';
+        function loadScript(url, onSuccess, onError) {
+            var s = document.createElement('script');
+            s.src = url;
+            s.onload = onSuccess;
+            s.onerror = onError;
+            document.head.appendChild(s);
+        }
+
+        loadScript(remoteUrl, function() {
+            console.log('远程配置加载成功');
+            document.dispatchEvent(new CustomEvent('configReady'));
+        }, function() {
+            console.warn('远程失败，使用本地');
+            loadScript(localUrl, function() {
+                document.dispatchEvent(new CustomEvent('configReady'));
+            }, function() {
+                console.error('本地配置也失败');
+            });
+        });
+    })();
+    </script>
     <style>
         /* 微信/QQ遮罩层样式 */
         .wechat-qq-mask {
@@ -436,309 +460,345 @@
         </div>
     </div>
 </div>
-
 <script>
-    (function() {
-        // 安全判断配置是否存在
-        if (!window.APP_CONFIG) {
-            console.error('APP_CONFIG 未加载');
-            return;
-        }
-        var cfg = window.APP_CONFIG;
+function initPage() {
+    var cfg = window.APP_CONFIG;
+    if (!cfg) {
+        console.warn('APP_CONFIG 未就绪，重试');
+        setTimeout(initPage, 50);
+        return;
+    }
 
-        // 1. 设置 meta 标签
-        var metaKeywords = document.querySelector('meta[name="keywords"]');
-        if (metaKeywords) metaKeywords.setAttribute('content', cfg.app_name + ',' + cfg.app_name + 'APP,' + cfg.app_name + '官网,' + cfg.www);
-        var metaDesc = document.querySelector('meta[name="description"]');
-        if (metaDesc) metaDesc.setAttribute('content', cfg.app_name + 'APP官网永久发布页');
+    // 1. 设置标题与 meta
+    document.title = cfg.title;
+    var metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (metaKeywords) metaKeywords.setAttribute('content', cfg.app_name + ',' + cfg.app_name + 'APP,' + cfg.app_name + '官网,' + cfg.www);
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', cfg.app_name + 'APP官网永久发布页');
 
-        // 2. 填充页面元素（通过 ID）
-        var headerImg = document.getElementById('headerImg');
-        if (headerImg) headerImg.src = cfg.img;
+    // 2. 填充页面元素（通过 ID）
+    var headerImg = document.getElementById('headerImg');
+    if (headerImg) headerImg.src = cfg.img;
 
-        var shareUrlText = document.getElementById('shareUrlText');
-        if (shareUrlText) shareUrlText.innerText = cfg.fzdz;
+    var shareUrlText = document.getElementById('shareUrlText');
+    if (shareUrlText) shareUrlText.innerText = cfg.fzdz;
 
-        var groupNameText = document.getElementById('groupNameText');
-        if (groupNameText) groupNameText.outerHTML = cfg.qqqun; // 保留样式
+    var groupNameText = document.getElementById('groupNameText');
+    if (groupNameText) groupNameText.outerHTML = cfg.qqqun;
 
-        var joinGroupBtn = document.getElementById('joinGroupBtn');
-        if (joinGroupBtn) {
-            joinGroupBtn.href = cfg.qundz;
-            joinGroupBtn.setAttribute('target', '_blank');
-        }
+    var joinGroupBtn = document.getElementById('joinGroupBtn');
+    if (joinGroupBtn) {
+        joinGroupBtn.href = cfg.qundz;
+        joinGroupBtn.setAttribute('target', '_blank');
+    }
 
-        var announcementText = document.getElementById('announcementText');
-        if (announcementText) announcementText.innerText = cfg.app_gg;
+    var announcementText = document.getElementById('announcementText');
+    if (announcementText) announcementText.innerText = cfg.app_gg;
 
-        var androidVersionText = document.getElementById('androidVersionText');
-        if (androidVersionText) androidVersionText.innerText = cfg.zxzt;
-        var androidDownloadBtn = document.getElementById('androidDownloadBtn');
-        if (androidDownloadBtn) androidDownloadBtn.href = cfg.zxzd;
+    var androidVersionText = document.getElementById('androidVersionText');
+    if (androidVersionText) androidVersionText.innerText = cfg.zxzt;
+    var androidDownloadBtn = document.getElementById('androidDownloadBtn');
+    if (androidDownloadBtn) androidDownloadBtn.href = cfg.zxzd;
 
-        var iosVersionText = document.getElementById('iosVersionText');
-        if (iosVersionText) iosVersionText.innerText = cfg.cxzt;
-        var iosDownloadBtn = document.getElementById('iosDownloadBtn');
-        if (iosDownloadBtn) iosDownloadBtn.href = cfg.cxzd;
+    var iosVersionText = document.getElementById('iosVersionText');
+    if (iosVersionText) iosVersionText.innerText = cfg.cxzt;
+    var iosDownloadBtn = document.getElementById('iosDownloadBtn');
+    if (iosDownloadBtn) iosDownloadBtn.href = cfg.cxzd;   // 设置 iOS 下载链接
 
-        var footerCopy = document.getElementById('footerCopy');
-        if (footerCopy) {
-            var currentYear = new Date().getFullYear();
-            footerCopy.innerHTML = footerCopy.innerHTML.replace(cfg.kfnd + ' - ' + /\d{4}/.exec(footerCopy.innerHTML)?.[0] || currentYear, cfg.kfnd + ' - ' + currentYear);
-            footerCopy.innerHTML = footerCopy.innerHTML.replace(/www\.lanlansp\.com/g, cfg.www);
-            footerCopy.innerHTML = footerCopy.innerHTML.replace(/懒懒视频/g, cfg.app_name);
-        }
+    var footerCopy = document.getElementById('footerCopy');
+    if (footerCopy) {
+        var currentYear = new Date().getFullYear();
+        footerCopy.innerHTML = footerCopy.innerHTML.replace(cfg.kfnd + ' - ' + /\d{4}/.exec(footerCopy.innerHTML)?.[0] || currentYear, cfg.kfnd + ' - ' + currentYear);
+        footerCopy.innerHTML = footerCopy.innerHTML.replace(/www\.lanlansp\.com/g, cfg.www);
+        footerCopy.innerHTML = footerCopy.innerHTML.replace(/懒懒视频/g, cfg.app_name);
+    }
 
-        // 处理 kk 开关：如果 kk !== "1"，隐藏 iOS 行
-        if (cfg.kk !== "1") {
-            var iosRow = document.getElementById('iosRow');
-            if (iosRow) iosRow.style.display = 'none';
-        }
+    if (cfg.kk !== "1") {
+        var iosRow = document.getElementById('iosRow');
+        if (iosRow) iosRow.style.display = 'none';
+    }
 
-        // 3. 复制链接功能
-        var copyBtn = document.getElementById('copyLinkBtn');
-        if (copyBtn) {
-            copyBtn.onclick = function(e) {
-                e.preventDefault();
-                var textToCopy = '神器，切勿分享：' + cfg.gwdz;
-                if (typeof ClipboardJS !== 'undefined') {
-                    var clipboard = new ClipboardJS('#copyLinkBtn', { text: function() { return textToCopy; } });
-                    clipboard.on('success', function() { alert('复制成功'); clipboard.destroy(); });
-                    clipboard.on('error', function() { alert('复制失败，请手动复制'); clipboard.destroy(); });
-                    clipboard.onClick(e);
-                } else {
-                    var tempInput = document.createElement('input');
-                    tempInput.value = textToCopy;
-                    document.body.appendChild(tempInput);
-                    tempInput.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(tempInput);
-                    alert('复制成功');
-                }
-            };
-        }
-
-        // 4. 动态生成二维码
-        function initStaticQR() {
-            var qrUrl = cfg.gwdz;
-            var qrContainer = document.querySelector('.qr-code');
-            if (qrContainer) {
-                var script = document.createElement('script');
-                script.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
-                script.onload = function() {
-                    var tempDiv = document.createElement('div');
-                    tempDiv.id = 'tempQR';
-                    tempDiv.style.position = 'absolute';
-                    tempDiv.style.opacity = '0';
-                    tempDiv.style.pointerEvents = 'none';
-                    document.body.appendChild(tempDiv);
-                    var qr = new QRCode(tempDiv, { text: qrUrl, width: 200, height: 200 });
-                    setTimeout(function() {
-                        var canvas = tempDiv.querySelector('canvas');
-                        if (canvas) {
-                            var dataUrl = canvas.toDataURL('image/png');
-                            qrContainer.style.backgroundImage = 'url(' + dataUrl + ')';
-                            qrContainer.style.backgroundSize = 'cover';
-                        }
-                        document.body.removeChild(tempDiv);
-                    }, 50);
-                };
-                document.head.appendChild(script);
-            }
-        }
-        initStaticQR();
-
-        // 5. 安装帮助弹窗中的动态名称
-        var generalAppName = document.getElementById('generalAppName');
-        if (generalAppName) generalAppName.innerHTML = cfg.app_name + ' 通用安装方法';
-        var generalAppSpan = document.getElementById('generalAppSpan');
-        if (generalAppSpan) generalAppSpan.innerText = cfg.app_name;
-        var samsungAppSpan = document.getElementById('samsungAppSpan');
-        if (samsungAppSpan) samsungAppSpan.innerText = cfg.app_name;
-    })();
-
-    // 微信/QQ环境检测与遮罩（立即执行）
-    (function() {
-        var ua = navigator.userAgent.toLowerCase();
-        var isWechat = ua.indexOf('micromessenger') !== -1;
-        var isQQ = ua.indexOf('qq') !== -1 && ua.indexOf('micromessenger') === -1;
-        if (isWechat || isQQ) {
-            var maskDiv = document.createElement('div');
-            maskDiv.className = 'wechat-qq-mask';
-            maskDiv.innerHTML = '<div class="simple-arrow">↗</div>' +
-                                '<div>' +
-                                '<p>检测到您在微信或QQ内打开</p>' +
-                                '<p>请点击右上角 <span class="dot-icon">...</span> 选择</p>' +
-                                '<p class="action-text">在浏览器中打开</p>' +
-                                '<p>以便正常访问下载页面</p>' +
-                                '</div>';
-            document.body.appendChild(maskDiv);
-            document.body.style.overflow = 'hidden';
-            maskDiv.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
-        }
-    })();
-
-    // 安装帮助弹窗交互（保持不变，但会引用 window.APP_CONFIG 中的 cxzd 等）
-    (function() {
-        var fab = document.getElementById('installHelpFab');
-        var modal = document.getElementById('installHelpModal');
-        var closeBtn = document.getElementById('installHelpClose');
-        var iosDownloadBtn = document.getElementById('iosDownloadBtn');
-        var iosDownloadUrl = iosDownloadBtn ? iosDownloadBtn.getAttribute('href') : '';
-        var tabs = document.querySelectorAll('.install-help-tab');
-        var panels = document.querySelectorAll('.install-help-panel');
-        var tabsContainer = document.querySelector('.install-help-tabs');
-        var titleEl = document.getElementById('installHelpTitle');
-        var subtitleEl = document.getElementById('installHelpSubtitle');
-        var androidAlert = document.getElementById('installAlertAndroid');
-        var iosAlert = document.getElementById('installAlertIos');
-        var dialogEl = modal ? modal.querySelector('.install-help-dialog') : null;
-
-        var defaultTitle = titleEl ? titleEl.textContent : '';
-        var defaultSubtitle = subtitleEl ? subtitleEl.textContent : '';
-        var iosTitle = 'iOS 安装须知';
-        var iosSubtitle = '测试阶段仅支持播放，请安装后体验';
-        var defaultFabText = fab ? fab.textContent : '无法安装？';
-        var currentIosButtonGroup = null;
-
-        function removeIosButtonGroup() {
-            if (currentIosButtonGroup && currentIosButtonGroup.parentNode) {
-                currentIosButtonGroup.parentNode.removeChild(currentIosButtonGroup);
-                currentIosButtonGroup = null;
-            }
-            if (fab) fab.style.display = '';
-        }
-
-        function createIosButtonGroup() {
-            if (!dialogEl) return null;
-            if (currentIosButtonGroup) removeIosButtonGroup();
-            var group = document.createElement('div');
-            group.className = 'ios-button-group';
-            var copyBtn = document.createElement('button');
-            copyBtn.className = 'ios-action-btn';
-            copyBtn.textContent = '复制下载地址';
-            copyBtn.onclick = function(e) {
-                e.preventDefault();
-                var urlToCopy = iosDownloadUrl || (window.APP_CONFIG ? window.APP_CONFIG.cxzd : '');
-                if (!urlToCopy) { alert('下载链接不存在'); return; }
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(urlToCopy).then(() => alert('复制成功：' + urlToCopy)).catch(() => fallbackCopy(urlToCopy));
-                } else { fallbackCopy(urlToCopy); }
-            };
-            var downloadBtn = document.createElement('button');
-            downloadBtn.className = 'ios-action-btn';
-            downloadBtn.textContent = '下载 IPA 文件';
-            downloadBtn.onclick = function(e) {
-                e.preventDefault();
-                var url = iosDownloadUrl || (window.APP_CONFIG ? window.APP_CONFIG.cxzd : '');
-                if (url) window.open(url, '_blank');
-                else alert('暂无下载地址');
-            };
-            group.appendChild(copyBtn);
-            group.appendChild(downloadBtn);
-            dialogEl.appendChild(group);
-            return group;
-        }
-
-        function fallbackCopy(text) {
-            var textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            try { document.execCommand('copy'); alert('复制成功：' + text); } catch (err) { alert('复制失败，请手动复制'); }
-            document.body.removeChild(textarea);
-        }
-
-        function setFabMode(mode) {
-            if (!fab) return;
-            if (mode === 'iosDownload') {
-                fab.style.display = 'none';
-                if (dialogEl && !currentIosButtonGroup) currentIosButtonGroup = createIosButtonGroup();
+    // 3. 复制链接功能
+    var copyBtn = document.getElementById('copyLinkBtn');
+    if (copyBtn) {
+        copyBtn.onclick = function(e) {
+            e.preventDefault();
+            var textToCopy = '神器，切勿分享：' + cfg.gwdz;
+            if (typeof ClipboardJS !== 'undefined') {
+                var clipboard = new ClipboardJS('#copyLinkBtn', { text: function() { return textToCopy; } });
+                clipboard.on('success', function() { alert('复制成功'); clipboard.destroy(); });
+                clipboard.on('error', function() { alert('复制失败，请手动复制'); clipboard.destroy(); });
+                clipboard.onClick(e);
             } else {
-                removeIosButtonGroup();
-                fab.style.display = '';
-                fab.textContent = defaultFabText;
-                fab.onclick = function() { openModal('panel-general'); };
+                var tempInput = document.createElement('input');
+                tempInput.value = textToCopy;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('复制成功');
             }
-        }
+        };
+    }
 
-        function openModal(targetId) {
-            modal.className = 'install-help-modal show';
-            document.body.style.overflow = 'hidden';
-            if (targetId === 'panel-ios') {
-                applyIosOnlyUI();
-                setFabMode('iosDownload');
-                if (dialogEl) dialogEl.classList.add('fab-in-modal-active');
+    // 4. 动态生成二维码
+    function initStaticQR() {
+        var qrUrl = cfg.gwdz;
+        var qrContainer = document.querySelector('.qr-code');
+        if (qrContainer) {
+            var script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
+            script.onload = function() {
+                var tempDiv = document.createElement('div');
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.opacity = '0';
+                tempDiv.style.pointerEvents = 'none';
+                document.body.appendChild(tempDiv);
+                var qr = new QRCode(tempDiv, { text: qrUrl, width: 200, height: 200 });
+                setTimeout(function() {
+                    var canvas = tempDiv.querySelector('canvas');
+                    if (canvas) {
+                        var dataUrl = canvas.toDataURL('image/png');
+                        qrContainer.style.backgroundImage = 'url(' + dataUrl + ')';
+                        qrContainer.style.backgroundSize = 'cover';
+                    }
+                    document.body.removeChild(tempDiv);
+                }, 50);
+            };
+            document.head.appendChild(script);
+        }
+    }
+    initStaticQR();
+
+    // 5. 安装帮助弹窗动态名称
+    var generalAppName = document.getElementById('generalAppName');
+    if (generalAppName) generalAppName.innerHTML = cfg.app_name + ' 通用安装方法';
+    var generalAppSpan = document.getElementById('generalAppSpan');
+    if (generalAppSpan) generalAppSpan.innerText = cfg.app_name;
+    var samsungAppSpan = document.getElementById('samsungAppSpan');
+    if (samsungAppSpan) samsungAppSpan.innerText = cfg.app_name;
+
+    // 6. 初始化安装帮助弹窗（在页面内容填充完成后）
+    initHelpModal();
+}
+
+function initHelpModal() {
+    var fab = document.getElementById('installHelpFab');
+    var modal = document.getElementById('installHelpModal');
+    var closeBtn = document.getElementById('installHelpClose');
+    var iosDownloadBtn = document.getElementById('iosDownloadBtn');
+    
+    // 实时获取最新链接的函数（避免缓存旧值）
+    function getIosDownloadUrl() {
+        if (!iosDownloadBtn) return '';
+        var url = iosDownloadBtn.getAttribute('href');
+        if (!url || url === '#' || url === 'javascript:void(0);') {
+            return '';
+        }
+        return url;
+    }
+    
+    var tabs = document.querySelectorAll('.install-help-tab');
+    var panels = document.querySelectorAll('.install-help-panel');
+    var tabsContainer = document.querySelector('.install-help-tabs');
+    var titleEl = document.getElementById('installHelpTitle');
+    var subtitleEl = document.getElementById('installHelpSubtitle');
+    var androidAlert = document.getElementById('installAlertAndroid');
+    var iosAlert = document.getElementById('installAlertIos');
+    var dialogEl = modal ? modal.querySelector('.install-help-dialog') : null;
+
+    var defaultTitle = titleEl ? titleEl.textContent : '';
+    var defaultSubtitle = subtitleEl ? subtitleEl.textContent : '';
+    var iosTitle = 'iOS 安装须知';
+    var iosSubtitle = '测试阶段仅支持播放，请安装后体验';
+    var defaultFabText = fab ? fab.textContent : '无法安装？';
+    var currentIosButtonGroup = null;
+
+    function removeIosButtonGroup() {
+        if (currentIosButtonGroup && currentIosButtonGroup.parentNode) {
+            currentIosButtonGroup.parentNode.removeChild(currentIosButtonGroup);
+            currentIosButtonGroup = null;
+        }
+        if (fab) fab.style.display = '';
+    }
+
+    function createIosButtonGroup() {
+        if (!dialogEl) return null;
+        if (currentIosButtonGroup) removeIosButtonGroup();
+        var group = document.createElement('div');
+        group.className = 'ios-button-group';
+        
+        var copyBtn = document.createElement('button');
+        copyBtn.className = 'ios-action-btn';
+        copyBtn.textContent = '复制下载地址';
+        copyBtn.onclick = function(e) {
+            e.preventDefault();
+            var urlToCopy = getIosDownloadUrl();
+            if (!urlToCopy) {
+                alert('下载地址不存在，请检查配置');
+                return;
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(urlToCopy).then(() => alert('复制成功：' + urlToCopy)).catch(() => fallbackCopy(urlToCopy));
             } else {
-                applyDefaultUI();
-                setFabMode('help');
-                if (dialogEl) dialogEl.classList.remove('fab-in-modal-active');
+                fallbackCopy(urlToCopy);
             }
-            switchPanel(targetId);
-        }
+        };
+        
+        var downloadBtn = document.createElement('button');
+        downloadBtn.className = 'ios-action-btn';
+        downloadBtn.textContent = '下载 IPA 文件';
+        downloadBtn.onclick = function(e) {
+            e.preventDefault();
+            var url = getIosDownloadUrl();
+            if (url) {
+                window.open(url, '_blank');
+            } else {
+                alert('下载地址不存在，请检查配置');
+            }
+        };
+        
+        group.appendChild(copyBtn);
+        group.appendChild(downloadBtn);
+        dialogEl.appendChild(group);
+        return group;
+    }
 
-        function closeModal() {
-            modal.className = 'install-help-modal';
-            document.body.style.overflow = '';
+    function fallbackCopy(text) {
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            alert('复制成功：' + text);
+        } catch (err) {
+            alert('复制失败，请手动复制');
+        }
+        document.body.removeChild(textarea);
+    }
+
+    function setFabMode(mode) {
+        if (!fab) return;
+        if (mode === 'iosDownload') {
+            fab.style.display = 'none';
+            if (dialogEl && !currentIosButtonGroup) currentIosButtonGroup = createIosButtonGroup();
+        } else {
+            removeIosButtonGroup();
+            fab.style.display = '';
+            fab.textContent = defaultFabText;
+            fab.onclick = function() { openModal('panel-general'); };
+        }
+    }
+
+    function openModal(targetId) {
+        modal.className = 'install-help-modal show';
+        document.body.style.overflow = 'hidden';
+        if (targetId === 'panel-ios') {
+            applyIosOnlyUI();
+            setFabMode('iosDownload');
+            if (dialogEl) dialogEl.classList.add('fab-in-modal-active');
+        } else {
             applyDefaultUI();
             setFabMode('help');
             if (dialogEl) dialogEl.classList.remove('fab-in-modal-active');
-            switchPanel('panel-general');
         }
+        switchPanel(targetId);
+    }
 
-        function applyIosOnlyUI() {
-            if (tabsContainer) {
-                for (var i = 0; i < tabs.length; i++) {
-                    var show = tabs[i].getAttribute('data-target') === 'panel-ios';
-                    tabs[i].style.display = show ? '' : 'none';
-                }
+    function closeModal() {
+        modal.className = 'install-help-modal';
+        document.body.style.overflow = '';
+        applyDefaultUI();
+        setFabMode('help');
+        if (dialogEl) dialogEl.classList.remove('fab-in-modal-active');
+        switchPanel('panel-general');
+    }
+
+    function applyIosOnlyUI() {
+        if (tabsContainer) {
+            for (var i = 0; i < tabs.length; i++) {
+                var show = tabs[i].getAttribute('data-target') === 'panel-ios';
+                tabs[i].style.display = show ? '' : 'none';
             }
         }
+    }
 
-        function applyDefaultUI() {
-            if (tabsContainer) {
-                for (var i = 0; i < tabs.length; i++) {
-                    tabs[i].style.display = '';
-                }
+    function applyDefaultUI() {
+        if (tabsContainer) {
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = '';
             }
         }
+    }
 
-        function switchPanel(targetId) {
-            for (var i = 0; i < tabs.length; i++) tabs[i].className = 'install-help-tab';
-            for (var j = 0; j < panels.length; j++) panels[j].className = 'install-help-panel';
-            var activeTab = document.querySelector('.install-help-tab[data-target="' + targetId + '"]');
-            var activePanel = document.getElementById(targetId);
-            if (activeTab) activeTab.className = 'install-help-tab active';
-            if (activePanel) activePanel.className = 'install-help-panel active';
-            if (targetId === 'panel-ios') {
-                if (titleEl) titleEl.textContent = iosTitle;
-                if (subtitleEl) subtitleEl.textContent = iosSubtitle;
-                if (androidAlert) androidAlert.style.display = 'none';
-                if (iosAlert) iosAlert.style.display = 'none';
-            } else {
-                if (titleEl) titleEl.textContent = defaultTitle;
-                if (subtitleEl) subtitleEl.textContent = defaultSubtitle;
-                if (androidAlert) androidAlert.style.display = 'block';
-                if (iosAlert) iosAlert.style.display = 'none';
-            }
+    function switchPanel(targetId) {
+        for (var i = 0; i < tabs.length; i++) tabs[i].className = 'install-help-tab';
+        for (var j = 0; j < panels.length; j++) panels[j].className = 'install-help-panel';
+        var activeTab = document.querySelector('.install-help-tab[data-target="' + targetId + '"]');
+        var activePanel = document.getElementById(targetId);
+        if (activeTab) activeTab.className = 'install-help-tab active';
+        if (activePanel) activePanel.className = 'install-help-panel active';
+        if (targetId === 'panel-ios') {
+            if (titleEl) titleEl.textContent = iosTitle;
+            if (subtitleEl) subtitleEl.textContent = iosSubtitle;
+            if (androidAlert) androidAlert.style.display = 'none';
+            if (iosAlert) iosAlert.style.display = 'none';
+        } else {
+            if (titleEl) titleEl.textContent = defaultTitle;
+            if (subtitleEl) subtitleEl.textContent = defaultSubtitle;
+            if (androidAlert) androidAlert.style.display = 'block';
+            if (iosAlert) iosAlert.style.display = 'none';
         }
+    }
 
-        if (fab && modal && closeBtn) {
-            closeBtn.onclick = closeModal;
-            modal.onclick = function(e) { if (e.target === modal) closeModal(); };
-            document.addEventListener('keydown', function(e) { if (modal.className.indexOf('show') !== -1 && e.keyCode === 27) closeModal(); });
-            for (var k = 0; k < tabs.length; k++) {
-                tabs[k].onclick = function() {
-                    var targetId = this.getAttribute('data-target');
-                    if (targetId === 'panel-ios') { applyIosOnlyUI(); setFabMode('iosDownload'); }
-                    else { applyDefaultUI(); setFabMode('help'); }
-                    switchPanel(targetId);
-                };
-            }
-            if (iosDownloadBtn) iosDownloadBtn.addEventListener('click', function(e) { e.preventDefault(); openModal('panel-ios'); });
-            setFabMode('help');
+    if (fab && modal && closeBtn) {
+        closeBtn.onclick = closeModal;
+        modal.onclick = function(e) { if (e.target === modal) closeModal(); };
+        document.addEventListener('keydown', function(e) {
+            if (modal.className.indexOf('show') !== -1 && e.keyCode === 27) closeModal();
+        });
+        for (var k = 0; k < tabs.length; k++) {
+            tabs[k].onclick = function() {
+                var targetId = this.getAttribute('data-target');
+                if (targetId === 'panel-ios') { applyIosOnlyUI(); setFabMode('iosDownload'); }
+                else { applyDefaultUI(); setFabMode('help'); }
+                switchPanel(targetId);
+            };
         }
-    })();
+        if (iosDownloadBtn) {
+            // 覆盖主按钮点击事件，打开弹窗
+            iosDownloadBtn.onclick = function(e) { e.preventDefault(); openModal('panel-ios'); };
+        }
+        setFabMode('help');
+    }
+}
+
+(function() {
+    var ua = navigator.userAgent.toLowerCase();
+    var isWechat = ua.indexOf('micromessenger') !== -1;
+    var isQQ = ua.indexOf('qq') !== -1 && ua.indexOf('micromessenger') === -1;
+    if (isWechat || isQQ) {
+        var maskDiv = document.createElement('div');
+        maskDiv.className = 'wechat-qq-mask';
+        maskDiv.innerHTML = '<div class="simple-arrow">↗</div>' +
+                            '<div>' +
+                            '<p>检测到您在微信或QQ内打开</p>' +
+                            '<p>请点击右上角 <span class="dot-icon">...</span> 选择</p>' +
+                            '<p class="action-text">在浏览器中打开</p>' +
+                            '<p>以便正常访问下载页面</p>' +
+                            '</div>';
+        document.body.appendChild(maskDiv);
+        document.body.style.overflow = 'hidden';
+        maskDiv.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+    }
+})();
+
+if (window.APP_CONFIG) {
+    initPage();
+} else {
+    document.addEventListener('configReady', initPage);
+}
 </script>
 </body>
 </html>
