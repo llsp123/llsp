@@ -6,13 +6,13 @@
     <meta name="Keywords" content="懒懒视频,懒懒视频APP,懒懒视频官网,www.lanlansp.com">
     <meta name="description" content="懒懒视频APP官网永久发布页">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="favicon.ico">
     <title>懒懒视频最全的影视APP - lanlansp.com</title>
     <link href="css/normalize.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
     <script src="js/clipboard.min.js"></script>
+    <script src="https://www.lanlansp.com/js/config.js"></script>
     <style>
-        /* 微信/QQ遮罩层样式 - 简单靠上，右上角箭头 */
+        /* 微信/QQ遮罩层样式 */
         .wechat-qq-mask {
             position: fixed;
             top: 0;
@@ -100,12 +100,6 @@
             border-radius: 18px;
             box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
             position: relative;
-        }
-        .install-help-dialog .install-help-fab.fab-in-modal {
-            position: absolute;
-            right: 18px;
-            bottom: 18px;
-            z-index: 99992;
         }
         .install-help-dialog.fab-in-modal-active .install-help-body {
             padding-bottom: 92px;
@@ -220,8 +214,6 @@
             display: flex;
             gap: 12px;
             z-index: 99992;
-        }
-        .ios-button-group {
             bottom: 24px;
             right: 20px;
         }
@@ -258,7 +250,7 @@
             }
         }
         .install-help-body {
-            padding-bottom: 90px !important; /* 确保底部空间足够 */
+            padding-bottom: 90px !important;
         }
         @media only screen and (min-width: 1024px) {
             .right-img {
@@ -295,264 +287,11 @@
     </style>
 </head>
 <body>
-<script>
-    const APP_CONFIG = {
-        img: "img/0.jpg",
-        title: "懒懒视频最全的影视APP - lanlansp.com",
-        app_name: "懒懒视频",
-        www: "www.lanlansp.com",
-        fzdz: "www.lanlansp.com",
-        gwdz: "http://www.lanlansp.com/",
-        qqqun: '<p class="p2">土豆交流群</p>',
-        qundz: "https://ptdy.org/joinchat/RDlHk2k3K0EMerNV01wu4Q",
-        app_gg: "2.3.6版本优化崩溃问题 修复播放稳定性",
-        zxzt: "2.4.19版本！支持安卓4.5以上",
-        cxzt: "IOS1.0.1测试阶段仅支持播放，请安装后体验",
-        zxzd: "https://wwic.lanzouo.com/ifT4f2y45m9c",
-        cxzd: "https://mfsp551.lanzouv.com/iL7dv3oaon6b",
-        kfnd: "2022",
-        kk: "1",
-        qrCodeBase64: "" // 稍后通过动态二维码生成填充，先占位
-    };
-
-    // 生成静态二维码 (使用 Canvas 方式生成，纯前端，无需后端)
-    function generateQRCode(text, callback) {
-        if (typeof QRCodeGen === 'undefined') {
-            var script = document.createElement('script');
-            script.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
-            script.onload = function() {
-                var qrcodeDiv = document.createElement('div');
-                qrcodeDiv.id = 'tempQrcodeGen';
-                qrcodeDiv.style.display = 'none';
-                document.body.appendChild(qrcodeDiv);
-                var qr = new QRCode(qrcodeDiv, {
-                    text: text,
-                    width: 200,
-                    height: 200
-                });
-                setTimeout(function() {
-                    var canvas = qrcodeDiv.querySelector('canvas');
-                    if (canvas) {
-                        var dataUrl = canvas.toDataURL('image/png');
-                        var base64 = dataUrl.split(',')[1];
-                        callback(base64);
-                    } else {
-                        callback('');
-                    }
-                    document.body.removeChild(qrcodeDiv);
-                }, 50);
-            };
-            document.head.appendChild(script);
-        } else {
-            // 备用
-        }
-    }
-
-    // 初始化二维码展示
-    function initStaticQR() {
-        var qrUrl = 'https://www.lanlansp.com/';
-        var qrContainer = document.querySelector('.qr-code');
-        if (qrContainer) {
-            // 动态创建canvas绘制二维码或使用 QRCode 库
-            var script = document.createElement('script');
-            script.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
-            script.onload = function() {
-                var tempDiv = document.createElement('div');
-                tempDiv.id = 'tempQR';
-                tempDiv.style.position = 'absolute';
-                tempDiv.style.opacity = '0';
-                tempDiv.style.pointerEvents = 'none';
-                document.body.appendChild(tempDiv);
-                var qr = new QRCode(tempDiv, {
-                    text: qrUrl,
-                    width: 200,
-                    height: 200
-                });
-                setTimeout(function() {
-                    var canvas = tempDiv.querySelector('canvas');
-                    if (canvas) {
-                        var dataUrl = canvas.toDataURL('image/png');
-                        qrContainer.style.backgroundImage = 'url(' + dataUrl + ')';
-                        qrContainer.style.backgroundSize = 'cover';
-                    } else {
-                        qrContainer.style.backgroundImage = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==')";
-                    }
-                    document.body.removeChild(tempDiv);
-                }, 50);
-            };
-            document.head.appendChild(script);
-        }
-    }
-
-    // 页面启动时设置所有动态内容
-    document.addEventListener('DOMContentLoaded', function() {
-        // 设置页面标题
-        document.title = APP_CONFIG.title;
-        // 设置meta keywords & description
-        var metaKeywords = document.querySelector('meta[name="keywords"]');
-        if (metaKeywords) metaKeywords.setAttribute('content', APP_CONFIG.app_name + ',' + APP_CONFIG.app_name + 'APP,' + APP_CONFIG.app_name + '官网,' + APP_CONFIG.www);
-        var metaDesc = document.querySelector('meta[name="description"]');
-        if (metaDesc) metaDesc.setAttribute('content', APP_CONFIG.app_name + 'APP官网永久发布页');
-        
-        // 填充页面内容
-        document.querySelector('.header img')?.setAttribute('src', APP_CONFIG.img);
-        // 填充网站域名等信息
-        var fzdzEl = document.querySelector('.row .text .p2');
-        if (fzdzEl && fzdzEl.parentElement?.previousElementSibling?.querySelector('.p1')?.innerText === '将网址分享给好友') {
-            fzdzEl.innerText = APP_CONFIG.fzdz;
-        }
-        // 填充交流群
-        var qqqunContainer = document.querySelector('.row .text');
-        if (qqqunContainer && qqqunContainer.querySelector('.p1')?.innerText === '加入APP交流群') {
-            var existingP2 = qqqunContainer.querySelector('.p2');
-            if (existingP2) existingP2.outerHTML = APP_CONFIG.qqqun;
-            else qqqunContainer.insertAdjacentHTML('beforeend', APP_CONFIG.qqqun);
-        }
-        // 更新交流群链接按钮
-        var qundzBtn = document.querySelector('.row a.btn-down[href="#"]') || document.querySelector('.row .btn-down');
-        if (qundzBtn && qundzBtn.parentElement?.querySelector('.text .p1')?.innerText === '加入APP交流群') {
-            qundzBtn.setAttribute('href', APP_CONFIG.qundz);
-            qundzBtn.setAttribute('target', '_blank');
-        }
-        // 最新公告
-        var ggText = document.querySelector('.row:last-child .text .p2');
-        if (ggText && ggText.parentElement?.previousElementSibling?.querySelector('.p1')?.innerText === '最新公告') {
-            ggText.innerText = APP_CONFIG.app_gg;
-        }
-        // 安卓版本信息及下载链接
-        var androidRows = Array.from(document.querySelectorAll('.row')).filter(row => row.querySelector('.icon-text .text .p1') && row.querySelector('.icon-text .text .p1').innerText.includes(APP_CONFIG.app_name));
-        for (var i = 0; i < androidRows.length; i++) {
-            var row = androidRows[i];
-            var p1Span = row.querySelector('.text .p1');
-            if (p1Span && p1Span.innerText.includes(APP_CONFIG.app_name)) {
-                if (p1Span.innerText.includes('安卓') || (!row.querySelector('.text .p1 span')?.innerText.includes('苹果IOS') && i === 0)) {
-                    row.querySelector('.text .p2').innerText = APP_CONFIG.zxzt;
-                    var btn = row.querySelector('.btn-down');
-                    if (btn) btn.setAttribute('href', APP_CONFIG.zxzd);
-                }
-            }
-        }
-        // IOS 部分
-        var iosRow = null;
-        var allRows = document.querySelectorAll('.row');
-        for (var j = 0; j < allRows.length; j++) {
-            if (allRows[j].innerHTML.includes('苹果IOS')) {
-                iosRow = allRows[j];
-                break;
-            }
-        }
-        if (iosRow) {
-            var p2Ios = iosRow.querySelector('.text .p2');
-            if (p2Ios) p2Ios.innerText = APP_CONFIG.cxzt;
-            var iosBtn = iosRow.querySelector('.btn-down');
-            if (iosBtn) iosBtn.setAttribute('href', APP_CONFIG.cxzd);
-        }
-        // 底部版权年份更新
-        var footEl = document.querySelector('.foot');
-        if (footEl) {
-            var currentYear = new Date().getFullYear();
-            footEl.innerHTML = footEl.innerHTML.replace(APP_CONFIG.kfnd + ' - ' + /\d{4}/.exec(footEl.innerHTML)?.[0] || currentYear, APP_CONFIG.kfnd + ' - ' + currentYear);
-            footEl.innerHTML = footEl.innerHTML.replace(/www\.lanlansp\.com/g, APP_CONFIG.www);
-            footEl.innerHTML = footEl.innerHTML.replace(/懒懒视频/g, APP_CONFIG.app_name);
-        }
-
-        // 处理kk开关控制IOS区块显示隐藏
-        if (APP_CONFIG.kk !== "1") {
-            var iosBlock = iosRow?.closest('.panel-box')?.querySelector('.row:last-child');
-            if (iosBlock) iosBlock.style.display = 'none';
-        }
-        // 复制链接按钮逻辑更新
-        window.copyBtn = function() {
-            if (typeof ClipboardJS !== 'undefined') {
-                new ClipboardJS('.btn', {
-                    text: function() { return '神器，切勿分享：' + APP_CONFIG.gwdz; }
-                });
-                alert('复制成功');
-            } else {
-                var tempInput = document.createElement('input');
-                tempInput.value = '神器，切勿分享：' + APP_CONFIG.gwdz;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                alert('复制成功');
-            }
-        };
-        // 重新绑定复制按钮点击事件
-        var copyBtnEl = document.querySelector('.btn');
-        if (copyBtnEl) {
-            copyBtnEl.onclick = function(e) {
-                e.preventDefault();
-                if (typeof ClipboardJS !== 'undefined') {
-                    var clipboard = new ClipboardJS('.btn', { text: function() { return '神器，切勿分享：' + APP_CONFIG.gwdz; } });
-                    clipboard.on('success', function() { alert('复制成功'); clipboard.destroy(); });
-                    clipboard.on('error', function() { alert('复制失败，请手动复制'); clipboard.destroy(); });
-                    clipboard.onClick(e);
-                } else {
-                    var input = document.createElement('input');
-                    input.value = '神器，切勿分享：' + APP_CONFIG.gwdz;
-                    document.body.appendChild(input);
-                    input.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(input);
-                    alert('复制成功');
-                }
-                return false;
-            };
-        }
-        // 生成二维码
-        initStaticQR();
-        // 修改 安装帮助弹窗里动态app_name
-        var generalPanel = document.getElementById('panel-general');
-        if (generalPanel) {
-            var generalTitle = generalPanel.querySelector('h4');
-            if (generalTitle) generalTitle.innerHTML = APP_CONFIG.app_name + ' 通用安装方法';
-            var lastLi = generalPanel.querySelector('li:last-child');
-            if (lastLi) lastLi.innerHTML = lastLi.innerHTML.replace(/懒懒视频/g, APP_CONFIG.app_name);
-        }
-        // 三星面板
-        var samsungPanel = document.getElementById('panel-samsung');
-        if (samsungPanel) {
-            var lastLiSam = samsungPanel.querySelector('li:last-child');
-            if (lastLiSam) lastLiSam.innerHTML = lastLiSam.innerHTML.replace(/懒懒视频/g, APP_CONFIG.app_name);
-        }
-        // 修改"加入APP交流群"按钮文字如果存在
-        var qunBtn = document.querySelector('.row .btn-down');
-        if (qunBtn && qunBtn.closest('.row')?.querySelector('.text .p1')?.innerText === '加入APP交流群') {
-            qunBtn.innerText = '点击联系';
-        }
-    });
-</script>
-<script>
-    // 微信/QQ环境检测与遮罩（立即执行）
-    (function() {
-        var ua = navigator.userAgent.toLowerCase();
-        var isWechat = ua.indexOf('micromessenger') !== -1;
-        var isQQ = ua.indexOf('qq') !== -1 && ua.indexOf('micromessenger') === -1;
-        if (isWechat || isQQ) {
-            var maskDiv = document.createElement('div');
-            maskDiv.className = 'wechat-qq-mask';
-            maskDiv.innerHTML = '<div class="simple-arrow">↗</div>' +
-                                '<div>' +
-                                '<p>检测到您在微信或QQ内打开</p>' +
-                                '<p>请点击右上角 <span class="dot-icon">...</span> 选择</p>' +
-                                '<p class="action-text">在浏览器中打开</p>' +
-                                '<p>以便正常访问下载页面</p>' +
-                                '</div>';
-            document.body.appendChild(maskDiv);
-            document.body.style.overflow = 'hidden';
-            maskDiv.addEventListener('touchmove', function(e) {
-                e.preventDefault();
-            }, { passive: false });
-        }
-    })();
-</script>
-
 <div class="page-body">
     <div class="page-mark"></div>
     <div class="page-center">
         <div class="header">
-            <img alt="" src="img/0.jpg" style="width: 175px; height: 60px;">
+            <img id="headerImg" alt="" src="img/0.jpg" style="width: 175px; height: 60px;">
         </div>
         <div class="top-line"></div>
         <div class="panel-content">
@@ -572,23 +311,23 @@
                     <div class="row">
                         <div class="text">
                             <p class="p1">将网址分享给好友 <span class="p1span">推荐</span></p>
-                            <p class="p2">www.lanlansp.com</p>
+                            <p id="shareUrlText" class="p2">www.lanlansp.com</p>
                         </div>
-                        <a href="javascript:;" class="btn">复制链接</a>
+                        <a href="javascript:;" id="copyLinkBtn" class="btn">复制链接</a>
                     </div>
                     <div class="top-line nomp"></div>
-                    <div class="row">
+                    <div class="row" id="groupRow">
                         <div class="text">
                             <p class="p1">加入APP交流群 <span class="p1span">推荐</span></p>
-                            <p class="p2">土豆交流群</p>
+                            <p id="groupNameText" class="p2">土豆交流群</p>
                         </div>
-                        <a href="#" target="_blank" class="btn-down">点击联系</a>
+                        <a href="#" id="joinGroupBtn" target="_blank" class="btn-down">点击联系</a>
                     </div>
                     <div class="top-line nomp"></div>
                     <div class="row">
                         <div class="text">
                             <p class="p1">最新公告 <span class="p4span">公告</span></p>
-                            <p class="p2">2.3.6版本优化崩溃问题 修复播放稳定性</p>
+                            <p id="announcementText" class="p2">2.3.6版本优化崩溃问题 修复播放稳定性</p>
                         </div>
                     </div>
                 </div>
@@ -607,7 +346,7 @@
                     <div class="title-t">APP下载</div>
                 </div>
                 <div class="panel-box">
-                    <div class="row">
+                    <div class="row" id="androidRow">
                         <div class="icon-text">
                             <svg class="ico" width="34" height="34" viewbox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect width="34" height="34" rx="17" fill="#74B969"></rect>
@@ -618,10 +357,10 @@
                             </svg>
                             <div class="text">
                                 <p class="p1">懒懒视频 <span class="p1span">安卓</span><span class="p2span">最新</span></p>
-                                <p class="p2">2.4.19版本！支持安卓4.5以上</p>
+                                <p id="androidVersionText" class="p2">2.4.19版本！支持安卓4.5以上</p>
                             </div>
                         </div>
-                        <a href="https://wwic.lanzouo.com/ifT4f2y45m9c" target="_blank" class="btn-down">
+                        <a href="#" id="androidDownloadBtn" target="_blank" class="btn-down">
                             <svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_170_20780)">
                                     <path d="M8.66658 6.66667H11.9999L7.99992 10.6667L3.99992 6.66667H7.33325V2H8.66658V6.66667ZM2.66659 12.6667H13.3333V8H14.6666V13.3333C14.6666 13.5101 14.5963 13.6797 14.4713 13.8047C14.3463 13.9298 14.1767 14 13.9999 14H1.99992C1.82311 14 1.65354 13.9298 1.52851 13.8047C1.40349 13.6797 1.33325 13.5101 1.33325 13.3333V8H2.66659V12.6667Z" fill="white"></path>
@@ -631,7 +370,7 @@
                         </a>
                     </div>
                     <div class="top-line nomp"></div>
-                    <div class="row">
+                    <div class="row" id="iosRow">
                         <div class="icon-text">
                             <svg class="ico" width="34" height="34" viewbox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect width="34" height="34" rx="17" fill="#74B969"></rect>
@@ -642,10 +381,10 @@
                             </svg>
                             <div class="text">
                                 <p class="p1">懒懒视频 <span class="p1span">苹果IOS</span><span class="p2span">最新</span></p>
-                                <p class="p2">IOS1.0.1测试阶段仅支持播放，请安装后体验</p>
+                                <p id="iosVersionText" class="p2">IOS1.0.1测试阶段仅支持播放，请安装后体验</p>
                             </div>
                         </div>
-                        <a href="https://mfsp551.lanzouv.com/iL7dv3oaon6b" class="btn-down" id="iosDownloadBtn">
+                        <a href="#" id="iosDownloadBtn" class="btn-down">
                             <svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_170_20780)">
                                     <path d="M8.66658 6.66667H11.9999L7.99992 10.6667L3.99992 6.66667H7.33325V2H8.66658V6.66667ZM2.66659 12.6667H13.3333V8H14.6666V13.3333C14.6666 13.5101 14.5963 13.6797 14.4713 13.8047C14.3463 13.9298 14.1767 14 13.9999 14H1.99992C1.82311 14 1.65354 13.9298 1.52851 13.8047C1.40349 13.6797 1.33325 13.5101 1.33325 13.3333V8H2.66659V12.6667Z" fill="white"></path>
@@ -659,7 +398,7 @@
         </div>
         <div class="qr-code"></div>
         <div class="right-img"></div>
-        <div class="foot">
+        <div class="foot" id="footerCopy">
             Copyright © 2022 - 2025 - www.lanlansp.com. All Rights Reserved. 懒懒视频 版权所有
             <a target="_blank" title="51la网站统计" href="https://v6.51.la/land/3IysusxReyRgN6wq"><img src="https://sdk.51.la/icon/1-1.png"></a>
         </div>
@@ -687,168 +426,319 @@
                 <button type="button" class="install-help-tab" data-target="panel-vivo">vivo</button>
                 <button type="button" class="install-help-tab" data-target="panel-samsung">三星</button>
             </div>
-            <div class="install-help-panel active" id="panel-general"><h4>懒懒视频 通用安装方法</h4><ol><li>先点击页面上的安卓下载按钮，完成 APK 文件下载。</li><li>若浏览器或系统提示无法安装，请进入系统设置，找到“安装未知应用”或“允许此来源安装应用”。</li><li>给当前下载工具或文件管理器开启安装权限后，重新点击 APK 文件继续安装。</li><li>安装完成后返回桌面打开 懒懒视频，即可正常使用。</li></ol></div>
+            <div class="install-help-panel active" id="panel-general"><h4 id="generalAppName">懒懒视频 通用安装方法</h4><ol><li>先点击页面上的安卓下载按钮，完成 APK 文件下载。</li><li>若浏览器或系统提示无法安装，请进入系统设置，找到“安装未知应用”或“允许此来源安装应用”。</li><li>给当前下载工具或文件管理器开启安装权限后，重新点击 APK 文件继续安装。</li><li>安装完成后返回桌面打开 <span id="generalAppSpan">懒懒视频</span>，即可正常使用。</li></ol></div>
             <div class="install-help-panel" id="panel-ios"><h4>iOS 安装须知</h4><p style="margin:0 0 10px;color: rgba(255, 255, 255, 0.85);line-height:1.8;font-size:14px;">测试阶段仅支持播放，请安装后体验</p><h4 style="margin-top:0;">安装须知</h4><ol><li>自签版通常有效期为 <strong>7 天</strong>，过期后需重新签名。</li><li>如需长久使用，请至淘宝/拼多多/闲鱼搜索 <strong>“P12签名”</strong>。</li></ol><div style="margin:10px 0 16px;color: rgba(255, 255, 255, 0.85);line-height:1.8;font-size:14px;">注：此类服务非我们售卖，如存在问题请联系商家。</div><h4 style="margin-top:0;">自签工具及教程</h4><div style="color: rgba(255, 255, 255, 0.85);line-height:1.8;font-size:14px;"><a href="https://www.bilibili.com/video/BV1Jg4y1n7hi/" target="_blank" rel="noopener noreferrer" style="color: rgba(255, 255, 255, 0.95);text-decoration: underline;">爱思助手</a>&nbsp;<a href="https://www.bilibili.com/video/BV1yF411a7i4/" target="_blank" rel="noopener noreferrer" style="color: rgba(255, 255, 255, 0.95);text-decoration: underline;">Sideloadly</a>&nbsp;<a href="https://www.bilibili.com/video/BV1HN411q7M4/" target="_blank" rel="noopener noreferrer" style="color: rgba(255, 255, 255, 0.95);text-decoration: underline;">牛蛙助手</a>&nbsp;<a href="https://www.bilibili.com/video/BV1Tj411r7rb/" target="_blank" rel="noopener noreferrer" style="color: rgba(255, 255, 255, 0.95);text-decoration: underline;">全能签</a>&nbsp;<a href="https://www.bilibili.com/video/BV1jV41137BB/" target="_blank" rel="noopener noreferrer" style="color: rgba(255, 255, 255, 0.95);text-decoration: underline;">轻松签</a></div></div>
             <div class="install-help-panel" id="panel-huawei"><h4>华为手机安装说明</h4><ol><li>打开“设置 &gt; 安全 &gt; 更多安全设置 &gt; 安装外部来源应用”。</li><li>找到你刚才下载 APK 使用的浏览器或“文件管理”。</li><li>开启“允许安装应用”后，返回下载目录重新安装。</li><li>若仍提示风险，可在安装页选择继续安装或忽略提醒。</li></ol></div>
             <div class="install-help-panel" id="panel-xiaomi"><h4>小米手机安装说明</h4><ol><li>打开“设置 &gt; 隐私保护 &gt; 特殊权限设置 &gt; 安装未知应用”。</li><li>选择当前浏览器、下载器或“文件管理”。</li><li>开启“允许来自此来源的应用”后，再次点击 APK 安装。</li><li>如果出现安全扫描，按页面提示继续安装即可。</li></ol></div>
             <div class="install-help-panel" id="panel-oppo"><h4>OPPO / realme 安装说明</h4><ol><li>进入“设置 &gt; 安全 &gt; 安装外部来源应用”或“特殊应用权限”。</li><li>选择当前下载 APK 的浏览器、应用市场替代工具或文件管理器。</li><li>开启安装权限后，返回文件管理重新打开 APK 文件。</li><li>如出现拦截提醒，点击继续安装或仍然安装即可。</li></ol></div>
             <div class="install-help-panel" id="panel-vivo"><h4>vivo 手机安装说明</h4><ol><li>打开“设置 &gt; 安全与隐私 &gt; 更多安全设置 &gt; 安装未知应用”。</li><li>找到浏览器或文件管理，开启对应安装权限。</li><li>返回下载列表，重新点击 APK 文件开始安装。</li><li>如果系统弹出风险提示，确认来源无误后继续安装。</li></ol></div>
-            <div class="install-help-panel" id="panel-samsung"><h4>三星手机安装说明</h4><ol><li>进入“设置 &gt; 生物识别和安全性 &gt; 安装未知应用”。</li><li>选择下载 APK 的浏览器或“我的文件”。</li><li>打开“允许此来源”后，回到下载目录重新安装 APK。</li><li>安装成功后即可在桌面打开 懒懒视频。</li></ol></div>
+            <div class="install-help-panel" id="panel-samsung"><h4>三星手机安装说明</h4><ol><li>进入“设置 &gt; 生物识别和安全性 &gt; 安装未知应用”。</li><li>选择下载 APK 的浏览器或“我的文件”。</li><li>打开“允许此来源”后，回到下载目录重新安装 APK。</li><li>安装成功后即可在桌面打开 <span id="samsungAppSpan">懒懒视频</span>。</li></ol></div>
         </div>
     </div>
 </div>
+
 <script>
     (function() {
-    var fab = document.getElementById('installHelpFab');
-    var modal = document.getElementById('installHelpModal');
-    var closeBtn = document.getElementById('installHelpClose');
-    var iosDownloadBtn = document.getElementById('iosDownloadBtn');
-    var iosDownloadUrl = iosDownloadBtn ? iosDownloadBtn.getAttribute('href') : '';
-    var tabs = document.querySelectorAll('.install-help-tab');
-    var panels = document.querySelectorAll('.install-help-panel');
-    var tabsContainer = document.querySelector('.install-help-tabs');
-    var titleEl = document.getElementById('installHelpTitle');
-    var subtitleEl = document.getElementById('installHelpSubtitle');
-    var androidAlert = document.getElementById('installAlertAndroid');
-    var iosAlert = document.getElementById('installAlertIos');
-    var dialogEl = modal ? modal.querySelector('.install-help-dialog') : null;
-
-    var defaultTitle = titleEl ? titleEl.textContent : '';
-    var defaultSubtitle = subtitleEl ? subtitleEl.textContent : '';
-    var iosTitle = 'iOS 安装须知';
-    var iosSubtitle = '测试阶段仅支持播放，请安装后体验';
-    var defaultFabText = fab ? fab.textContent : '无法安装？';
-    var currentIosButtonGroup = null;
-
-    function removeIosButtonGroup() {
-        if (currentIosButtonGroup && currentIosButtonGroup.parentNode) {
-            currentIosButtonGroup.parentNode.removeChild(currentIosButtonGroup);
-            currentIosButtonGroup = null;
+        // 安全判断配置是否存在
+        if (!window.APP_CONFIG) {
+            console.error('APP_CONFIG 未加载');
+            return;
         }
-        if (fab) fab.style.display = '';
-    }
+        var cfg = window.APP_CONFIG;
 
-    function createIosButtonGroup() {
-        if (!dialogEl) return null;
-        if (currentIosButtonGroup) removeIosButtonGroup();
-        var group = document.createElement('div');
-        group.className = 'ios-button-group';
-        var copyBtn = document.createElement('button');
-        copyBtn.className = 'ios-action-btn';
-        copyBtn.textContent = '复制下载地址';
-        copyBtn.onclick = function(e) {
-            e.preventDefault();
-            var urlToCopy = iosDownloadUrl || APP_CONFIG.cxzd;
-            if (!urlToCopy) { alert('下载链接不存在'); return; }
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(urlToCopy).then(() => alert('复制成功：' + urlToCopy)).catch(() => fallbackCopy(urlToCopy));
-            } else { fallbackCopy(urlToCopy); }
-        };
-        var downloadBtn = document.createElement('button');
-        downloadBtn.className = 'ios-action-btn';
-        downloadBtn.textContent = '下载 IPA 文件';
-        downloadBtn.onclick = function(e) {
-            e.preventDefault();
-            var url = iosDownloadUrl || APP_CONFIG.cxzd;
-            if (url) window.open(url, '_blank');
-            else alert('暂无下载地址');
-        };
-        group.appendChild(copyBtn);
-        group.appendChild(downloadBtn);
-        dialogEl.appendChild(group);
-        return group;
-    }
+        // 1. 设置 meta 标签
+        var metaKeywords = document.querySelector('meta[name="keywords"]');
+        if (metaKeywords) metaKeywords.setAttribute('content', cfg.app_name + ',' + cfg.app_name + 'APP,' + cfg.app_name + '官网,' + cfg.www);
+        var metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute('content', cfg.app_name + 'APP官网永久发布页');
 
-    function fallbackCopy(text) {
-        var textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        try { document.execCommand('copy'); alert('复制成功：' + text); } catch (err) { alert('复制失败，请手动复制'); }
-        document.body.removeChild(textarea);
-    }
+        // 2. 填充页面元素（通过 ID）
+        var headerImg = document.getElementById('headerImg');
+        if (headerImg) headerImg.src = cfg.img;
 
-    function setFabMode(mode) {
-        if (!fab) return;
-        if (mode === 'iosDownload') {
-            fab.style.display = 'none';
-            if (dialogEl && !currentIosButtonGroup) currentIosButtonGroup = createIosButtonGroup();
-        } else {
-            removeIosButtonGroup();
-            fab.style.display = '';
-            fab.textContent = defaultFabText;
-            fab.onclick = function() { openModal('panel-general'); };
+        var shareUrlText = document.getElementById('shareUrlText');
+        if (shareUrlText) shareUrlText.innerText = cfg.fzdz;
+
+        var groupNameText = document.getElementById('groupNameText');
+        if (groupNameText) groupNameText.outerHTML = cfg.qqqun; // 保留样式
+
+        var joinGroupBtn = document.getElementById('joinGroupBtn');
+        if (joinGroupBtn) {
+            joinGroupBtn.href = cfg.qundz;
+            joinGroupBtn.setAttribute('target', '_blank');
         }
-    }
 
-    function openModal(targetId) {
-        modal.className = 'install-help-modal show';
-        document.body.style.overflow = 'hidden';
-        if (targetId === 'panel-ios') {
-            applyIosOnlyUI();
-            setFabMode('iosDownload');
-            if (dialogEl) dialogEl.classList.add('fab-in-modal-active');
-        } else {
+        var announcementText = document.getElementById('announcementText');
+        if (announcementText) announcementText.innerText = cfg.app_gg;
+
+        var androidVersionText = document.getElementById('androidVersionText');
+        if (androidVersionText) androidVersionText.innerText = cfg.zxzt;
+        var androidDownloadBtn = document.getElementById('androidDownloadBtn');
+        if (androidDownloadBtn) androidDownloadBtn.href = cfg.zxzd;
+
+        var iosVersionText = document.getElementById('iosVersionText');
+        if (iosVersionText) iosVersionText.innerText = cfg.cxzt;
+        var iosDownloadBtn = document.getElementById('iosDownloadBtn');
+        if (iosDownloadBtn) iosDownloadBtn.href = cfg.cxzd;
+
+        var footerCopy = document.getElementById('footerCopy');
+        if (footerCopy) {
+            var currentYear = new Date().getFullYear();
+            footerCopy.innerHTML = footerCopy.innerHTML.replace(cfg.kfnd + ' - ' + /\d{4}/.exec(footerCopy.innerHTML)?.[0] || currentYear, cfg.kfnd + ' - ' + currentYear);
+            footerCopy.innerHTML = footerCopy.innerHTML.replace(/www\.lanlansp\.com/g, cfg.www);
+            footerCopy.innerHTML = footerCopy.innerHTML.replace(/懒懒视频/g, cfg.app_name);
+        }
+
+        // 处理 kk 开关：如果 kk !== "1"，隐藏 iOS 行
+        if (cfg.kk !== "1") {
+            var iosRow = document.getElementById('iosRow');
+            if (iosRow) iosRow.style.display = 'none';
+        }
+
+        // 3. 复制链接功能
+        var copyBtn = document.getElementById('copyLinkBtn');
+        if (copyBtn) {
+            copyBtn.onclick = function(e) {
+                e.preventDefault();
+                var textToCopy = '神器，切勿分享：' + cfg.gwdz;
+                if (typeof ClipboardJS !== 'undefined') {
+                    var clipboard = new ClipboardJS('#copyLinkBtn', { text: function() { return textToCopy; } });
+                    clipboard.on('success', function() { alert('复制成功'); clipboard.destroy(); });
+                    clipboard.on('error', function() { alert('复制失败，请手动复制'); clipboard.destroy(); });
+                    clipboard.onClick(e);
+                } else {
+                    var tempInput = document.createElement('input');
+                    tempInput.value = textToCopy;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    alert('复制成功');
+                }
+            };
+        }
+
+        // 4. 动态生成二维码
+        function initStaticQR() {
+            var qrUrl = cfg.gwdz;
+            var qrContainer = document.querySelector('.qr-code');
+            if (qrContainer) {
+                var script = document.createElement('script');
+                script.src = "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js";
+                script.onload = function() {
+                    var tempDiv = document.createElement('div');
+                    tempDiv.id = 'tempQR';
+                    tempDiv.style.position = 'absolute';
+                    tempDiv.style.opacity = '0';
+                    tempDiv.style.pointerEvents = 'none';
+                    document.body.appendChild(tempDiv);
+                    var qr = new QRCode(tempDiv, { text: qrUrl, width: 200, height: 200 });
+                    setTimeout(function() {
+                        var canvas = tempDiv.querySelector('canvas');
+                        if (canvas) {
+                            var dataUrl = canvas.toDataURL('image/png');
+                            qrContainer.style.backgroundImage = 'url(' + dataUrl + ')';
+                            qrContainer.style.backgroundSize = 'cover';
+                        }
+                        document.body.removeChild(tempDiv);
+                    }, 50);
+                };
+                document.head.appendChild(script);
+            }
+        }
+        initStaticQR();
+
+        // 5. 安装帮助弹窗中的动态名称
+        var generalAppName = document.getElementById('generalAppName');
+        if (generalAppName) generalAppName.innerHTML = cfg.app_name + ' 通用安装方法';
+        var generalAppSpan = document.getElementById('generalAppSpan');
+        if (generalAppSpan) generalAppSpan.innerText = cfg.app_name;
+        var samsungAppSpan = document.getElementById('samsungAppSpan');
+        if (samsungAppSpan) samsungAppSpan.innerText = cfg.app_name;
+    })();
+
+    // 微信/QQ环境检测与遮罩（立即执行）
+    (function() {
+        var ua = navigator.userAgent.toLowerCase();
+        var isWechat = ua.indexOf('micromessenger') !== -1;
+        var isQQ = ua.indexOf('qq') !== -1 && ua.indexOf('micromessenger') === -1;
+        if (isWechat || isQQ) {
+            var maskDiv = document.createElement('div');
+            maskDiv.className = 'wechat-qq-mask';
+            maskDiv.innerHTML = '<div class="simple-arrow">↗</div>' +
+                                '<div>' +
+                                '<p>检测到您在微信或QQ内打开</p>' +
+                                '<p>请点击右上角 <span class="dot-icon">...</span> 选择</p>' +
+                                '<p class="action-text">在浏览器中打开</p>' +
+                                '<p>以便正常访问下载页面</p>' +
+                                '</div>';
+            document.body.appendChild(maskDiv);
+            document.body.style.overflow = 'hidden';
+            maskDiv.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+        }
+    })();
+
+    // 安装帮助弹窗交互（保持不变，但会引用 window.APP_CONFIG 中的 cxzd 等）
+    (function() {
+        var fab = document.getElementById('installHelpFab');
+        var modal = document.getElementById('installHelpModal');
+        var closeBtn = document.getElementById('installHelpClose');
+        var iosDownloadBtn = document.getElementById('iosDownloadBtn');
+        var iosDownloadUrl = iosDownloadBtn ? iosDownloadBtn.getAttribute('href') : '';
+        var tabs = document.querySelectorAll('.install-help-tab');
+        var panels = document.querySelectorAll('.install-help-panel');
+        var tabsContainer = document.querySelector('.install-help-tabs');
+        var titleEl = document.getElementById('installHelpTitle');
+        var subtitleEl = document.getElementById('installHelpSubtitle');
+        var androidAlert = document.getElementById('installAlertAndroid');
+        var iosAlert = document.getElementById('installAlertIos');
+        var dialogEl = modal ? modal.querySelector('.install-help-dialog') : null;
+
+        var defaultTitle = titleEl ? titleEl.textContent : '';
+        var defaultSubtitle = subtitleEl ? subtitleEl.textContent : '';
+        var iosTitle = 'iOS 安装须知';
+        var iosSubtitle = '测试阶段仅支持播放，请安装后体验';
+        var defaultFabText = fab ? fab.textContent : '无法安装？';
+        var currentIosButtonGroup = null;
+
+        function removeIosButtonGroup() {
+            if (currentIosButtonGroup && currentIosButtonGroup.parentNode) {
+                currentIosButtonGroup.parentNode.removeChild(currentIosButtonGroup);
+                currentIosButtonGroup = null;
+            }
+            if (fab) fab.style.display = '';
+        }
+
+        function createIosButtonGroup() {
+            if (!dialogEl) return null;
+            if (currentIosButtonGroup) removeIosButtonGroup();
+            var group = document.createElement('div');
+            group.className = 'ios-button-group';
+            var copyBtn = document.createElement('button');
+            copyBtn.className = 'ios-action-btn';
+            copyBtn.textContent = '复制下载地址';
+            copyBtn.onclick = function(e) {
+                e.preventDefault();
+                var urlToCopy = iosDownloadUrl || (window.APP_CONFIG ? window.APP_CONFIG.cxzd : '');
+                if (!urlToCopy) { alert('下载链接不存在'); return; }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(urlToCopy).then(() => alert('复制成功：' + urlToCopy)).catch(() => fallbackCopy(urlToCopy));
+                } else { fallbackCopy(urlToCopy); }
+            };
+            var downloadBtn = document.createElement('button');
+            downloadBtn.className = 'ios-action-btn';
+            downloadBtn.textContent = '下载 IPA 文件';
+            downloadBtn.onclick = function(e) {
+                e.preventDefault();
+                var url = iosDownloadUrl || (window.APP_CONFIG ? window.APP_CONFIG.cxzd : '');
+                if (url) window.open(url, '_blank');
+                else alert('暂无下载地址');
+            };
+            group.appendChild(copyBtn);
+            group.appendChild(downloadBtn);
+            dialogEl.appendChild(group);
+            return group;
+        }
+
+        function fallbackCopy(text) {
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try { document.execCommand('copy'); alert('复制成功：' + text); } catch (err) { alert('复制失败，请手动复制'); }
+            document.body.removeChild(textarea);
+        }
+
+        function setFabMode(mode) {
+            if (!fab) return;
+            if (mode === 'iosDownload') {
+                fab.style.display = 'none';
+                if (dialogEl && !currentIosButtonGroup) currentIosButtonGroup = createIosButtonGroup();
+            } else {
+                removeIosButtonGroup();
+                fab.style.display = '';
+                fab.textContent = defaultFabText;
+                fab.onclick = function() { openModal('panel-general'); };
+            }
+        }
+
+        function openModal(targetId) {
+            modal.className = 'install-help-modal show';
+            document.body.style.overflow = 'hidden';
+            if (targetId === 'panel-ios') {
+                applyIosOnlyUI();
+                setFabMode('iosDownload');
+                if (dialogEl) dialogEl.classList.add('fab-in-modal-active');
+            } else {
+                applyDefaultUI();
+                setFabMode('help');
+                if (dialogEl) dialogEl.classList.remove('fab-in-modal-active');
+            }
+            switchPanel(targetId);
+        }
+
+        function closeModal() {
+            modal.className = 'install-help-modal';
+            document.body.style.overflow = '';
             applyDefaultUI();
             setFabMode('help');
             if (dialogEl) dialogEl.classList.remove('fab-in-modal-active');
+            switchPanel('panel-general');
         }
-        switchPanel(targetId);
-    }
 
-    function closeModal() {
-        modal.className = 'install-help-modal';
-        document.body.style.overflow = '';
-        applyDefaultUI();
-        setFabMode('help');
-        if (dialogEl) dialogEl.classList.remove('fab-in-modal-active');
-        switchPanel('panel-general');
-    }
-
-    function applyIosOnlyUI() {
-        if (tabsContainer) { for (var i = 0; i < tabs.length; i++) { var show = tabs[i].getAttribute('data-target') === 'panel-ios'; tabs[i].style.display = show ? '' : 'none'; } }
-    }
-
-    function applyDefaultUI() {
-        if (tabsContainer) { for (var i = 0; i < tabs.length; i++) { tabs[i].style.display = ''; } }
-    }
-
-    function switchPanel(targetId) {
-        for (var i = 0; i < tabs.length; i++) tabs[i].className = 'install-help-tab';
-        for (var j = 0; j < panels.length; j++) panels[j].className = 'install-help-panel';
-        var activeTab = document.querySelector('.install-help-tab[data-target="' + targetId + '"]');
-        var activePanel = document.getElementById(targetId);
-        if (activeTab) activeTab.className = 'install-help-tab active';
-        if (activePanel) activePanel.className = 'install-help-panel active';
-        if (targetId === 'panel-ios') {
-            if (titleEl) titleEl.textContent = iosTitle;
-            if (subtitleEl) subtitleEl.textContent = iosSubtitle;
-            if (androidAlert) androidAlert.style.display = 'none';
-            if (iosAlert) iosAlert.style.display = 'none';
-        } else {
-            if (titleEl) titleEl.textContent = defaultTitle;
-            if (subtitleEl) subtitleEl.textContent = defaultSubtitle;
-            if (androidAlert) androidAlert.style.display = 'block';
-            if (iosAlert) iosAlert.style.display = 'none';
+        function applyIosOnlyUI() {
+            if (tabsContainer) {
+                for (var i = 0; i < tabs.length; i++) {
+                    var show = tabs[i].getAttribute('data-target') === 'panel-ios';
+                    tabs[i].style.display = show ? '' : 'none';
+                }
+            }
         }
-    }
 
-    if (fab && modal && closeBtn) {
-        closeBtn.onclick = closeModal;
-        modal.onclick = function(e) { if (e.target === modal) closeModal(); };
-        document.addEventListener('keydown', function(e) { if (modal.className.indexOf('show') !== -1 && e.keyCode === 27) closeModal(); });
-        for (var k = 0; k < tabs.length; k++) {
-            tabs[k].onclick = function() {
-                var targetId = this.getAttribute('data-target');
-                if (targetId === 'panel-ios') { applyIosOnlyUI(); setFabMode('iosDownload'); }
-                else { applyDefaultUI(); setFabMode('help'); }
-                switchPanel(targetId);
-            };
+        function applyDefaultUI() {
+            if (tabsContainer) {
+                for (var i = 0; i < tabs.length; i++) {
+                    tabs[i].style.display = '';
+                }
+            }
         }
-        if (iosDownloadBtn) iosDownloadBtn.addEventListener('click', function(e) { e.preventDefault(); openModal('panel-ios'); });
-        setFabMode('help');
-    }
-})();
+
+        function switchPanel(targetId) {
+            for (var i = 0; i < tabs.length; i++) tabs[i].className = 'install-help-tab';
+            for (var j = 0; j < panels.length; j++) panels[j].className = 'install-help-panel';
+            var activeTab = document.querySelector('.install-help-tab[data-target="' + targetId + '"]');
+            var activePanel = document.getElementById(targetId);
+            if (activeTab) activeTab.className = 'install-help-tab active';
+            if (activePanel) activePanel.className = 'install-help-panel active';
+            if (targetId === 'panel-ios') {
+                if (titleEl) titleEl.textContent = iosTitle;
+                if (subtitleEl) subtitleEl.textContent = iosSubtitle;
+                if (androidAlert) androidAlert.style.display = 'none';
+                if (iosAlert) iosAlert.style.display = 'none';
+            } else {
+                if (titleEl) titleEl.textContent = defaultTitle;
+                if (subtitleEl) subtitleEl.textContent = defaultSubtitle;
+                if (androidAlert) androidAlert.style.display = 'block';
+                if (iosAlert) iosAlert.style.display = 'none';
+            }
+        }
+
+        if (fab && modal && closeBtn) {
+            closeBtn.onclick = closeModal;
+            modal.onclick = function(e) { if (e.target === modal) closeModal(); };
+            document.addEventListener('keydown', function(e) { if (modal.className.indexOf('show') !== -1 && e.keyCode === 27) closeModal(); });
+            for (var k = 0; k < tabs.length; k++) {
+                tabs[k].onclick = function() {
+                    var targetId = this.getAttribute('data-target');
+                    if (targetId === 'panel-ios') { applyIosOnlyUI(); setFabMode('iosDownload'); }
+                    else { applyDefaultUI(); setFabMode('help'); }
+                    switchPanel(targetId);
+                };
+            }
+            if (iosDownloadBtn) iosDownloadBtn.addEventListener('click', function(e) { e.preventDefault(); openModal('panel-ios'); });
+            setFabMode('help');
+        }
+    })();
 </script>
 </body>
 </html>
